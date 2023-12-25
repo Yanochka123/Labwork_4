@@ -77,33 +77,36 @@ if __name__ == "__main__":
             films_rating[i].add_viewer(new_user)
 
     # sort by rating all films
-    films = film_sortion(films_rating)
+    films_ = film_sortion(films_rating)
 
     # обработка пользователя в зависимости от его списка просмотров с помощью множеств
     # и обработки рэйтинга фильмов
     request = input()
     new_user = viewers()
-    user_films = [int(i) for i in v.split(',')]
+    user_films = [int(i) for i in request.split(',')]
     new_user.add_film(user_films)
 
     recommendation = set()
     user_rating_films = []
     unseen_rating_films = []
-    for i in range(len(films)):
-        if films[i].get_name in user_films:
-            user_rating_films.append(films[i])
+    for i in range(len(films_)):
+        if films_[i].get_name() in user_films:
+            user_rating_films.append(films_[i])
         else:
-            unseen_rating_films.append(films[i])
+            unseen_rating_films.append(films_[i])
 
-    recommendation = user_rating_films[0].get_viewers
+    recommendation = user_rating_films[0].get_viewers()
     for i in range(1, int(len(user_rating_films)/2)):
-        recommendation.intersection(user_rating_films[i].get_viewers)
+        recommendation = recommendation.intersection(
+            user_rating_films[i].get_viewers)
 
     recommended_films = set()
     if len(recommendation) == 0:
-        print(unseen_rating_films[0])
+        print(unseen_rating_films[0].get_name())
     else:
         for i in recommendation:
-            recommended_films.add(i.get_films())
+            recommended_films.update(i.get_films())
         recommended_films = recommended_films - new_user.get_films()
-        print(recommended_films.pop())
+        recommended_list = list(recommended_films)
+        recommended_list = film_sortion(recommended_list)
+        print(recommended_list[0])
